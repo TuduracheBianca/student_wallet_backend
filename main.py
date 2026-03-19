@@ -1,22 +1,27 @@
-from FastAPI import FastAPI
-from pydantic import BaseModel #pentru crearea modelelor de date
+from fastapi import FastAPI
+from pydantic import BaseModel # for creating data models
 
-app = FastAPI()#initializam aplicatia FastAPI
+app = FastAPI() # initialize the FastAPI application
 
-#am creat un endpoint pentru a verifica daca functioneaza aplicatia(adresa web)
-#@app.get("/")
-#def read_root():
-#    return {"mesaj": "student_wallet functioneaza"}
+# endpoint to check if the app is running (health check)
+@app.get("/")
+def read_root():
+    return {"message": "Student Wallet API is running"}
 
-class Cheltuiala(BaseModel):
+class Expense(BaseModel):
     id: int
-    name:str
-    sum: float
+    name: str
+    amount: float
     category: str
-    #date: str
+    # date: str
 
-cheltuieli = [] #lista pentru a stoca cheltuielile
-@app.post("/adauga/") #endpoint pentru adaugarea unei cheltuieli
-def adauga_cheltuiala(cheltuiala:Cheltuiala):
-    cheltuieli.append(cheltuiala)
-    return {"mesaj": "Cheltuiala adaugata cu succes"}
+expenses = [] # list to store the expenses
+
+@app.post("/add-expense/") # endpoint for adding an expense
+def add_expense(expense: Expense):
+    expenses.append(expense)
+    return {"message": "Expense added successfully"}
+
+@app.get("/expenses/") # endpoint to retrieve all expenses
+def get_all_expenses():
+    return expenses
