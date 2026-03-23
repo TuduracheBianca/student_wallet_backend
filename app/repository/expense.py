@@ -15,3 +15,22 @@ def create_expense(db: Session, expense: Expense):
     db.commit()
     db.refresh(db_expense)
     return db_expense
+
+def delete_expense(db:Session, expense_id:int):
+    expense= db.query(ExpenseDB).filter(ExpenseDB.id == expense_id).first()
+    if expense:
+        db.delete(expense)
+        db.commit()
+        return True
+    return False
+
+def update_expense(db:Session,expense_id:int, update_data:Expense):
+    expense=db.query(ExpenseDB).filter(ExpenseDB.id == expense_id).first()
+    if expense:
+        expense.name=update_data.name
+        expense.amount=update_data.amount
+        expense.category=update_data.category
+        db.commit()
+        db.refresh(expense)
+        return expense
+    return None
